@@ -30,14 +30,13 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen({ navigation, route }) {
+  const { user } = useAuth();
   const registerApi = useApi(usersApi.register);
   const loginApi = useApi(authApi.login);
   const [error, setError] = useState();
 
   const handleSubmit = async (userInfo) => {
-    const userData = route.params
-      ? { ...userInfo, owner: route.params._id }
-      : userInfo;
+    const userData = route.params ? { ...userInfo, owner: user._id } : userInfo;
     const result = await registerApi.request(userData);
 
     if (!result.ok) {
@@ -49,7 +48,7 @@ function RegisterScreen({ navigation, route }) {
     }
 
     route.params
-      ? navigation.navigate(routes.USERS)
+      ? navigation.navigate(routes.ACCOUNT_SCREEN)
       : navigation.navigate(routes.LOGIN);
   };
 

@@ -24,7 +24,13 @@ export default AuthNavigator = () => (
     <Stack.Screen
       name="Login"
       component={LoginScreen}
-      options={{ headerShown: false }}
+      options={() => ({
+        title: "Login your account",
+        headerTintColor: colors.white,
+        headerStyle: {
+          backgroundColor: colors.secondary,
+        },
+      })}
     />
     <Stack.Screen name="Register" component={RegisterScreen} />
     <Stack.Screen

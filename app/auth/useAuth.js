@@ -20,5 +20,11 @@ export default useAuth = () => {
     authStorage.removeToken();
   };
 
-  return { user, logIn, logOut };
+  const deleteAccount = (id) => {
+    auth.deleteUser(id);
+    setUser(null);
+    authStorage.removeToken();
+  };
+
+  return { user, logIn, logOut, deleteAccount };
 };

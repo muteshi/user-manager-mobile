@@ -50,7 +50,7 @@ function UserProfileScreen({ navigation, route }) {
     getUsersApi.request();
   }, []);
 
-  const admins = users.filter((user) => user.role === "admin");
+  const admins = users.filter((u) => u.role === "admin");
 
   const validationSchema = Yup.object().shape({
     name: user
@@ -76,23 +76,31 @@ function UserProfileScreen({ navigation, route }) {
   const handleSubmit = async (userData) => {
     setProgress(0);
     setUploadVisible(true);
+
+    const role =
+      userData.hasOwnProperty("role") && userData.role !== null
+        ? userData.role.value
+        : null;
+
+    const approved =
+      userData.hasOwnProperty("role") &&
+      userData.role !== null &&
+      userData.role.value === "admin"
+        ? true
+        : null;
+
+    const owner = admin.length !== 0 ? admin[0]._id : null;
+
+    userData["approved"] = approved;
+    userData["owner"] = owner;
+    userData["role"] = role;
+
     Object.keys(userData).forEach((key) =>
       userData[key] === null ? delete userData[key] : {}
     );
 
-    const role = userData.hasOwnProperty("role")
-      ? userData.role.value
-      : user.role;
-
-    const approved = admin.length !== 0 ? true : false;
-
     const result = await userApi.editUser(
-      {
-        ...userData,
-        role,
-        approved,
-        owner: admin.length !== 0 ? admin[0]._id : "",
-      },
+      userData,
       (progress) => setProgress(progress),
       user._id
     );
@@ -166,9 +174,9 @@ function UserProfileScreen({ navigation, route }) {
             selectedUser={
               admin.length !== 0 ? admin[0].name : "Assign user to admin"
             }
-            onSelectUser={(user) => {
+            onSelectUser={(userA) => {
               const adminId = getUsersApi.data.filter(
-                (u) => u._id === user._id
+                (u) => u._id === userA._id
               );
               setAdmin(adminId);
             }}

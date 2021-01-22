@@ -1,5 +1,5 @@
 export default Object.freeze({
-  WELCOME_SCREEN: "WelcomeScreen",
+  WELCOME_SCREEN: "Welcome",
   AUTH_NAVIGATOR: "AuthNavigator",
   ACCOUNT_SCREEN: "AccountScreen",
   LOGIN: "Login",

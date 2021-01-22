@@ -3,7 +3,6 @@ import { StyleSheet, View, FlatList } from "react-native";
 
 import useAuth from "../auth/useAuth";
 import Icon from "../components/Icon";
-import user from "../api/auth";
 
 import ListItem from "../components/lists/ListItem";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
@@ -33,7 +32,7 @@ const menuItems = [
 ];
 
 function AccountScreen({ navigation, route }) {
-  const { user, logOut, logIn } = useAuth();
+  const { user, logOut, deleteAccount } = useAuth();
   const admin = user ? user.superuser || user.role === "admin" : null;
 
   return (
@@ -70,11 +69,27 @@ function AccountScreen({ navigation, route }) {
         </View>
       )}
       {user ? (
-        <ListItem
-          title="Logout"
-          IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
-          onPress={() => logOut()}
-        />
+        <>
+          <ListItem
+            title="Delete your account"
+            IconComponent={
+              <Icon name="delete-outline" backgroundColor="#b00000" />
+            }
+            onPress={() => {
+              if (user.superuser) {
+                alert("You cannot delete a super user account");
+                return;
+              }
+              deleteAccount(user._id);
+              navigation.navigate(routes.WELCOME_SCREEN);
+            }}
+          />
+          <ListItem
+            title="Logout"
+            IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+            onPress={() => logOut()}
+          />
+        </>
       ) : (
         <ListItem
           title="Login"
