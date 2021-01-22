@@ -42,6 +42,7 @@ function AccountScreen({ navigation, route }) {
           <ListItem
             title={user ? user.name : null}
             subTitle={user ? user.email : null}
+            prefix={user ? user.role : null}
             image={user.profile_photo ? user_profile : defaultUserImage}
             onPress={() => navigation.navigate(routes.USER)}
           />
